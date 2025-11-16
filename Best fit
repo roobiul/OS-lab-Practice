@@ -1,0 +1,40 @@
+def best_fit(bk_size,pr_size):
+    allocation= [-1]*len(pr_size)
+
+    for i in range(len(pr_size)):
+        best_index=-1
+        for j in range (len(bk_size)):
+            if bk_size[j] >= pr_size[i]:
+                if best_index==-1 or bk_size[j] < bk_size[best_index]:
+                    #আগের থেকে ছোট ব্লক পাওয়া গেলে সেটাকেই বেছে নেওয়া
+                    best_index=j
+
+        #if found a block
+        if best_index!= -1:
+            allocation[i]=best_index
+            bk_size[best_index] -= pr_size[i]
+
+    #print allocation result
+    print("\tprocess no \tprocess size \tblock no")
+    for i in range(len(pr_size)):
+        print(f"{i+1}\t\t {pr_size[i]}",end="")
+        if allocation[i]!=-1:
+            print(f"\t{allocation[i]+1}")
+        else:
+            print("\tnot allocated")
+
+
+# --------user input-------
+process_count=int(input("enter the no of process:"))
+pr_size=[]
+for i in range(process_count):
+    size=int(input(f"process {i+1}:"))
+    pr_size.append(size)
+
+block_count=int(input("\nenter the no of block:"))
+bk_size=[]
+for i in range(block_count):
+    size=int(input(f"block {i+1}:"))
+    bk_size.append(size)
+
+best_fit(bk_size,pr_size)

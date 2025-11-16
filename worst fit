@@ -1,0 +1,47 @@
+# Worst Fit Memory Allocation in Python
+def worstFit(process_size, block_size):
+    allocation = [-1] * len(process_size)  # initially no process is allocated
+
+    # pick each process and find the worst fit block
+    for i in range(len(process_size)):
+        worst_index = -1
+        for j in range(len(block_size)):
+            if block_size[j] >= process_size[i]:
+                if worst_index == -1 or block_size[j] > block_size[worst_index]:
+                    worst_index = j
+
+        # if a block is found for the process
+        if worst_index != -1:
+            allocation[i] = worst_index
+            block_size[worst_index] -= process_size[i]
+
+    # print allocation result
+    print("\nProcess No.\tProcess Size\tBlock No.")
+    for i in range(len(process_size)):
+        print(f"{i + 1}\t\t{process_size[i]}\t\t", end="")
+        if allocation[i] != -1:
+            print(allocation[i] + 1)
+        else:
+            print("Not Allocated")
+
+
+# ------------ main program -------------
+process_count=int(input("enter the no of process:"))
+process_size=[]
+for i in range(process_count):
+    size=int(input(f"process {i+1}:"))
+    process_size.append(size)
+
+block_count=int(input("\nenter the no of block:"))
+block_size=[]
+for i in range(block_count):
+    size=int(input(f"block {i+1}:"))
+    block_size.append(size)
+
+worstFit(process_size, block_size)
+
+#sample input
+'''Enter number of blocks: 5
+Enter block sizes: 100 500 200 300 600
+Enter number of processes: 4
+Enter process sizes: 212 417 112 426'''

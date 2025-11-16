@@ -1,0 +1,52 @@
+n = int(input("Enter no of Process : "))
+AT = []
+BT = []
+
+gantt = []
+TAT = [0] * n
+WT = [0] * n
+current = 0
+
+for i in range(n):
+    at = int(input(f"Enter AT for P{i+1} : "))
+    AT.append(at)
+    bt = int(input(f"Enter BT for P{i+1} : "))
+    BT.append(bt)
+
+process = list(range(n))
+process.sort(key=lambda x: AT[x])
+
+for p in process:
+    if AT[p] > current:
+        gantt.append("ideal")
+        current = AT[p]
+
+    current += BT[p]
+    TAT[p] = current - AT[p]
+    WT[p] = TAT[p] - BT[p]
+    gantt.append(f"P{p}")
+
+print("Gantt chart ")
+print(" -> ".join(gantt))
+
+# Compute and print ATT and AWT
+AWT = sum(WT) / n
+ATT = sum(TAT) / n
+
+print("\nProcess\tArrival\t\t\tBurst\t\tWaiting\t\tTurnaround")
+for i in range(n):
+    print(f"P{i+1}\t\t\t{AT[i]}\t\t\t{BT[i]}\t\t\t{WT[i]}\t\t\t{TAT[i]}")
+
+print(f"\nAverage Waiting Time (AWT): {AWT:.2f}")
+print(f"Average Turnaround Time (ATT): {ATT:.2f}")
+
+#input
+# Enter no of Process : 4
+# Enter AT for P0 : 0
+# Enter BT for P0 : 5
+# Enter AT for P1 : 1
+# Enter BT for P1 : 3
+# Enter AT for P2 : 2
+# Enter BT for P2 : 8
+# Enter AT for P3 : 3
+# Enter BT for P3 : 6

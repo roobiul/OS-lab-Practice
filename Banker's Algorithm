@@ -1,0 +1,66 @@
+def bankers_algo(allocation,max,available):
+    n = len(allocation)
+    m = len(available)
+
+    need = [[max[i][j] - allocation[i][j] for j in range(m)] for i in range(n)]
+
+    finish = [False]*n
+    work = available.copy()
+    safe_seq = []
+
+    while len(safe_seq)<n:
+        found = False
+        for i in range(n):
+            if not finish[i]:
+                if all(need[i][j]<=work[j] for j in range(m)):
+                    for k in range(m):
+                        work[k]  += allocation[i][k]
+                    safe_seq.append(i)
+                    finish[i] = True
+                    found = True
+        
+        if not found:
+            break
+    
+    is_safe = len(safe_seq) == n
+    return is_safe,safe_seq,need
+
+
+
+n = int(input("Enter number of processes: "))
+m = int(input("Enter number of resources: "))
+
+print("\nEnter allocation Matrix: ")
+allocation = [list(map(int,input(f"P{i}: ").split())) for i in range(n)]
+
+print("\nEnter Max_Need Matrix: ")
+max = [list(map(int,input(f"P{i}: ").split())) for i in range(n)]
+
+print("\nEnter available Matrix: ")
+available = list(map(int,input().split()))
+
+is_safe,safe_sequence,need = bankers_algo(allocation,max,available)
+
+print("\nThe Need matrix is : ")
+for i in range(n):
+    print(F"P{i}: {need[i]}")
+
+if safe_sequence:
+    print("The System is a safe state")
+    print(f"The safe sequence: ","->".join(f"P{i}" for i in safe_sequence))
+else:
+    print("The system is not a safe state")
+
+# Sample Input:
+# Enter allocation Matrix:
+# P0: 2 3 4
+# P1: 5 6 7
+# P2: 1 2 3
+
+# Enter Max_Need Matrix:
+# P0: 7 8 6
+# P1: 1 4 6
+# P2: 8 9 4
+
+# Enter available Matrix:
+# 4 5 6
